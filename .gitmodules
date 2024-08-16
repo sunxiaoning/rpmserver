@@ -1,0 +1,6 @@
+[submodule "rpmsync"]
+	path = rpmsync
+	url = https://github.com/sunxiaoning/rpmsync
+[submodule "bashutils"]
+	path = bashutils
+	url = https://github.com/sunxiaoning/bashutils
