@@ -6,6 +6,7 @@ set -o pipefail
 
 start-reposerver() {
   if systemctl is-active --quiet nginx; then
+    echo "Service nginx is already started!"
     return 0
   fi
   setsenginx
@@ -36,6 +37,7 @@ reload-reposerver() {
 stop-reposerver() {
   local service_status=$(systemctl is-active nginx 2>/dev/null || true)
   if [[ "${service_status}" == "inactive" ]] || [[ "${service_status}" == "dead" ]]; then
+    echo "Service nginx is already stopped!"
     return 0
   fi
 
