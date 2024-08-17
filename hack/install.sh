@@ -65,6 +65,7 @@ install-repoconf() {
     repo_conf_name=${SERVER_NAME}
   fi
   bashutils/render.sh conf/repo.conf.tmpl "conf/${repo_conf_name}.conf"
+  trap 'rm -rf "conf/${repo_conf_name}.conf"' EXIT
   install -D -m 644 "conf/${repo_conf_name}.conf" "/etc/nginx/conf.d/${repo_conf_name}.conf" 
   nginx -t
 }
