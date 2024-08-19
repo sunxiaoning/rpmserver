@@ -1,27 +1,25 @@
-# rpmserver
-private rpm repo server
+# Private RPM Server
+Private RPM Repository OPS
 
-## 1. autorun reposerver
+## AutoRun a Private RPM Server
 ```bash
-# pull repo store, install, config and run repo server
 make autorun-reposerver
 ```
+---
+## Operations Detail
 
-## 2. operation on reposerver
-
-
-### reload reposerver
+### 1. Reload the RPM Server
 ```bash
 make reload-reposerver
 ```
 
 
-### stop reposerver
+### 2. Stop the RPM Server
 ```bash
 make stop-reposerver
 ```
 
-### start reposerver
+### 3. Start the RPM Server
 ```bash
 make start-reposerver
 ```
