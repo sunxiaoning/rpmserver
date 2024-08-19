@@ -4,6 +4,8 @@ set -o nounset
 set -o errexit
 set -o pipefail
 
+. hack/env.sh
+
 start-reposerver() {
   if systemctl is-active --quiet nginx; then
     echo "Service nginx is already started!"

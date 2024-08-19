@@ -3,20 +3,20 @@ set -o nounset
 set -o errexit
 set -o pipefail
 
-USE_DOCKER=${USE_DOCKER:-"0"}
+. hack/env.sh
 
 NGINX_VERSION=1.26.1
 
-export NGCONF_DATADIR=/etc/nginx/conf.d/*.conf
+NGCONF_DATADIR=/etc/nginx/conf.d/*.conf
 
-export CLEAN_NGDATA_UNINSTALL=${CLEAN_NGDATA_UNINSTALL:-"0"}
-export STOPNG_ONINSTALL=${STOPNG_ONINSTALL:-"0"}
-
-PROJECT_PATH=$(pwd)
+CLEAN_DATA_ON_UNINSTALL=${CLEAN_DATA_ON_UNINSTALL:-"0"}
+STOP_SERV_ON_UNINSTALL=${STOP_SERV_ON_UNINSTALL:-"0"}
 
 uninstall-reposerver() {
 
-  if [[ "1" == "${STOPNG_ONINSTALL}" ]]; then
+  # TODO check status ??
+
+  if [[ "1" == "${STOP_SERV_ON_UNINSTALL}" ]]; then
     hack/run.sh stop
   else
     local service_status=$(systemctl is-active nginx 2>/dev/null || true)
@@ -35,7 +35,7 @@ uninstall-reposerver() {
     exit 1
   fi
 
-  if [[ "1" == "${CLEAN_NGDATA_UNINSTALL}" ]]; then
+  if [[ "1" == "${CLEAN_DATA_ON_UNINSTALL}" ]]; then
     echo "Clean old ngconf datadir ..."
     rm -rf ${NGCONF_DATADIR}
   fi
