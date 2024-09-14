@@ -23,8 +23,9 @@ RPMSYNC_MODULE=rpmsync
 
 STOP_SERV_ON_INSTALL=${STOP_SERV_ON_INSTALL:-"0"}
 
-
 PROJECT_PATH=$(pwd)
+SCRIPT_DIR=$(dirname "$(realpath "${BASH_SOURCE}")")
+RENDER_SH_FILE="${SCRIPT_DIR}/../bashutils/render.sh"
 
 install-repostore() {
   cd "${RPMSYNC_MODULE}"
@@ -35,7 +36,7 @@ install-repostore() {
 install-reposerver() {
   check-repolocalroot
   check-nginxrpm-exists
-  if rpm -q "nginx-${NGINX_VERSION}" &> /dev/null; then
+  if rpm -q "nginx-${NGINX_VERSION}" &>/dev/null; then
     echo "Nginx is already installed!"
     return 0
   fi
@@ -50,14 +51,14 @@ install-reposerver() {
     fi
   fi
 
-  if rpm -q "nginx" &> /dev/null; then
+  if rpm -q "nginx" &>/dev/null; then
     echo "Find old nginx pkg installed, abort!"
     exit 1
   fi
 
   rpm -ivh "${REPO_LOCAL_ROOT_PATH}/nginx/${NGINX_VERSION}/nginx-${NGINX_VERSION}-${RELEASE}.${DIST}.${ARCH}.rpm"
 
-  if ! rpm -q "nginx-${NGINX_VERSION}" &> /dev/null; then
+  if ! rpm -q "nginx-${NGINX_VERSION}" &>/dev/null; then
     echo "nginx not installed!"
     exit 1
   fi
@@ -79,9 +80,9 @@ install-repoconf() {
   if [[ "${REPO_SERVER_NAME}" != "localhost" ]]; then
     REPO_CONF_NAME="${REPO_SERVER_NAME}"
   fi
-  bashutils/render.sh conf/repo.conf.tmpl "conf/${REPO_CONF_NAME}.conf"
+  "${RENDER_SH_FILE}" conf/repo.conf.tmpl "conf/${REPO_CONF_NAME}.conf"
   trap 'rm -rf "conf/${REPO_CONF_NAME}.conf"' EXIT
-  install -D -m 644 "conf/${REPO_CONF_NAME}.conf" "/etc/nginx/conf.d/${REPO_CONF_NAME}.conf" 
+  install -D -m 644 "conf/${REPO_CONF_NAME}.conf" "/etc/nginx/conf.d/${REPO_CONF_NAME}.conf"
   nginx -t
 }
 
@@ -90,12 +91,11 @@ check-repolocalroot() {
     echo "REPO_LOCAL_ROOT: ${REPO_LOCAL_ROOT_PATH} not exists!" >&2
     exit 1
   fi
-  if [ -z "$(ls -A ${REPO_LOCAL_ROOT_PATH})" ]; then 
+  if [ -z "$(ls -A ${REPO_LOCAL_ROOT_PATH})" ]; then
     echo "REPO_LOCAL_ROOT Dir: ${REPO_LOCAL_ROOT_PATH} is empty!" >&2
     exit 1
   fi
 }
-
 
 main() {
   if [[ "1" == "${USE_DOCKER}" ]]; then
