@@ -17,6 +17,8 @@ REPO_CONF_NAME="default"
 
 ENABLE_SERVICE_ON_INSTALL=${ENABLE_SERVICE_ON_INSTALL:-"1"}
 
+REPO_CONF_ROOT_PATH="${CONTEXT_DIR}/conf"
+
 install-repostore() {
   "${RPMSYNC_SH_FILE}" install-repoall
 }
@@ -95,11 +97,11 @@ install-repoconf() {
     REPO_CONF_NAME="${REPO_SERVER_NAME}"
   fi
 
-  bashutils/render.sh conf/repo.conf.tmpl "conf/${REPO_CONF_NAME}.conf"
+  bashutils/render.sh "${REPO_CONF_ROOT_PATH}/repo.conf.tmpl" "${REPO_CONF_ROOT_PATH}/${REPO_CONF_NAME}.conf"
 
-  TEMP_FILES+=("conf/${REPO_CONF_NAME}.conf")
+  TEMP_FILES+=("${REPO_CONF_ROOT_PATH}/${REPO_CONF_NAME}.conf")
 
-  install -D -m 644 "conf/${REPO_CONF_NAME}.conf" "${NGCONF_DATADIR}/${REPO_CONF_NAME}.conf"
+  install -D -m 644 "${REPO_CONF_ROOT_PATH}/${REPO_CONF_NAME}.conf" "${NGCONF_DATADIR}/${REPO_CONF_NAME}.conf"
 
   nginx -t
 }
