@@ -1,8 +1,6 @@
 export REPO_ORIGIN_SOURCE=${REPO_ORIGIN_SOURCE:-"0"}
 
-RPMSYNC_MODULE="rpmsync"
-
-RPMSYNC_SH_FILE="${RPMSYNC_MODULE}/rpmsync.sh"
+RPMSYNC_SH_FILE="${CONTEXT_DIR}/rpmsync/rpmsync.sh"
 
 export REPO_LOCAL_ROOT_PATH=${REPO_LOCAL_ROOT_PATH:-/opt/rpmrepo}
 
