@@ -41,7 +41,8 @@ enable-reposerver-service() {
 
   enabled_status="$(systemctl is-enabled nginx 2>/dev/null || true)"
   if [[ "${enabled_status}" != "enabled" ]]; then
-    systemctl enable nginx
+    echo "${NGINX_APP_NAME}-${NGINX_VERSION} not enabled!" >&2
+    exit 1
   fi
 }
 
@@ -60,20 +61,20 @@ install-reposerver-rpm() {
   else
     local service_status=$(systemctl is-active nginx 2>/dev/null || true)
     if [[ "${service_status}" != "inactive" ]] && [[ "${service_status}" != "dead" ]]; then
-      echo "Service nginx has not been shutdown completed!"
+      echo "Service nginx has not been shutdown completed!" >&2
       exit 1
     fi
   fi
 
   if rpm -q "${NGINX_APP_NAME}" &>/dev/null; then
-    echo "Find old nginx pkg installed, abort!"
+    echo "Find old nginx pkg installed, abort!" >&2
     exit 1
   fi
 
   rpm -ivh "${REPO_LOCAL_ROOT_PATH}/nginx/${NGINX_VERSION}/nginx-${NGINX_VERSION}-${NGINX_RELEASE}.${DIST}.${ARCH}.rpm"
 
   if ! rpm -q "${NGINX_APP_NAME}-${NGINX_VERSION}" &>/dev/null; then
-    echo "${NGINX_APP_NAME}-${NGINX_VERSION} not installed!"
+    echo "${NGINX_APP_NAME}-${NGINX_VERSION} not installed!" >&2
     exit 1
   fi
 }
