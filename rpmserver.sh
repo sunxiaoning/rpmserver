@@ -7,7 +7,7 @@ SCRIPT_NAME=$(basename "$0")
 
 OPS_SH_DIR="${CONTEXT_DIR}/ops"
 
-. "${CONTEXT_DIR}/ops/env.sh"
+. "${OPS_SH_DIR}/env.sh"
 
 . "${OPS_SH_DIR}/install.sh"
 
