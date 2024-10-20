@@ -47,6 +47,17 @@ reload-reposerver() {
   systemctl reload nginx
 }
 
+reload-or-restart-reposerver() {
+  echo "Reload or restart service nginx..."
+
+  systemctl reload-or-restart nginx
+
+  if ! systemctl is-active --quiet nginx; then
+    echo "Nginx is not running!" >&2
+    exit 1
+  fi
+}
+
 stop-reposerver() {
   local service_status=$(systemctl is-active nginx 2>/dev/null || true)
   if [[ "${service_status}" == "inactive" ]] || [[ "${service_status}" == "dead" ]]; then

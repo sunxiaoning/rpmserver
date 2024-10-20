@@ -23,7 +23,7 @@ TEMP_FILES=()
 run-reposerver() {
   install-reposerver
   install-repoconf
-  start-reposerver
+  reload-or-restart-reposerver
 }
 
 autorun-reposerver() {
