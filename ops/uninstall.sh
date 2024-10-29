@@ -5,6 +5,14 @@ CLEAN_DATA_ON_UNINSTALL=${CLEAN_DATA_ON_UNINSTALL:-"0"}
 uninstall-reposerver() {
   uninstall-reposerver-rpm
   clean-ngconf-datadir
+  clean-local-repo
+}
+
+clean-local-repo() {
+  if [[ "1" == "${CLEAN_DATA_ON_UNINSTALL}" ]]; then
+    echo "Clean local repo ..."
+    rm -rf "${REPO_LOCAL_ROOT_PATH}"
+  fi
 }
 
 clean-ngconf-datadir() {
