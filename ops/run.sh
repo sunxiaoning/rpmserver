@@ -50,6 +50,8 @@ reload-reposerver() {
 reload-or-restart-reposerver() {
   echo "Reload or restart service nginx..."
 
+  setsenginx
+
   systemctl reload-or-restart nginx
 
   if ! systemctl is-active --quiet nginx; then
